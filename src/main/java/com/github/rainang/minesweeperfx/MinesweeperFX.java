@@ -11,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -29,7 +28,7 @@ public class MinesweeperFX extends Application implements Event.Listener
 	
 	private Stage stage;
 	
-	final Minesweeper minesweeper = new Minesweeper(new Random(0));
+	final Minesweeper minesweeper = new Minesweeper();
 	
 	final Board board = new Board(minesweeper, createBevelBorderLowered());
 	final Data data = new Data(minesweeper);
