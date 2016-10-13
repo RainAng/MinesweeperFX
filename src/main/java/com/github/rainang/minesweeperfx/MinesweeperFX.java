@@ -42,6 +42,7 @@ public class MinesweeperFX extends Application implements Event.Listener
 		data.setBorder(createBevelBorderLowered());
 		minesweeper.addEventListener(board);
 		minesweeper.addEventListener(data);
+		minesweeper.addEventListener(menu);
 		minesweeper.addEventListener(this);
 		minesweeper.setDifficulty(Minesweeper.Difficulty.BEGINNER);
 		
