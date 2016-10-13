@@ -40,7 +40,7 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		
 		CheckMenuItem miMins = new CheckMenuItem("Show Minutes");
 		CheckMenuItem miMills = new CheckMenuItem("Show Milliseconds");
-		MenuItem miCL = new CheckMenuItem("Change Log v" + Minesweeper.VERSION);
+		MenuItem miCL = new MenuItem("Change Log v" + Minesweeper.VERSION);
 		miMins.selectedProperty().addListener((a, b, c) -> mfx.data.setFormat(c, miMills.isSelected()));
 		miMills.selectedProperty().addListener((a, b, c) -> mfx.data.setFormat(miMins.isSelected(), c));
 		
@@ -58,7 +58,7 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		miMills.setAccelerator(new KeyCodeCombination(M, CONTROL_DOWN));
 		
 		Menu mbView = new Menu("View");
-		mbView.getItems().addAll(miMins, miMills, miCL);
+		mbView.getItems().addAll(miMins, miMills, new SeparatorMenuItem(), miCL);
 		
 		getMenus().addAll(mbFile, mbOptions, mbView);
 		
