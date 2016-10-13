@@ -65,8 +65,8 @@ public class IntField extends TextField
 			}
 		};
 		
-		UnaryOperator<TextFormatter.Change> filter = change -> (change.getText().matches("[0-9]*") || change.getText()
-				.equals("-")) && change.getControlNewText().matches(INT_PATTERN) ? change : null;
+		UnaryOperator<TextFormatter.Change> filter = change -> change.getControlNewText().matches(INT_PATTERN) ?
+				change : null;
 		
 		if (minValue != 0)
 			setMinValue(minValue);
