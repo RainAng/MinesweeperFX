@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Show/hide menu
 - Show/hide data
 - Show/hide grid
+- Start new game from seed
 
 ## [0.1.0] - 2016-10-13 
 ### Added

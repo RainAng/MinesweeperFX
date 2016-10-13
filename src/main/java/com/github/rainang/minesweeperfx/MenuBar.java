@@ -6,8 +6,15 @@ import com.github.rainang.minesweeperlib.Tile;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+
+import java.util.Random;
 
 import static com.github.rainang.minesweeperlib.Minesweeper.Difficulty.*;
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
+import static javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE;
+import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 import static javafx.scene.input.KeyCode.*;
 import static javafx.scene.input.KeyCombination.CONTROL_DOWN;
 
@@ -20,11 +27,13 @@ class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
 	MenuBar(MinesweeperFX mfx)
 	{
 		MenuItem miNew = new MenuItem("New Game");
+		MenuItem miLoad = new MenuItem("New Game from Seed...");
 		MenuItem miRestart = new MenuItem("Restart Game");
 		MenuItem miPause = new MenuItem("Pause Game");
 		MenuItem miExit = new MenuItem("Exit");
 		Menu mbFile = new Menu("File");
-		mbFile.getItems().addAll(miNew, miRestart, new SeparatorMenuItem(), miPause, new SeparatorMenuItem(), miExit);
+		mbFile.getItems().addAll(miNew, miLoad, miRestart, new SeparatorMenuItem(), miPause, new SeparatorMenuItem(),
+				miExit);
 		
 		RadioMenuItem miCustom = new RadioMenuItem("Custom...");
 		ToggleGroup tgDifficulty = new ToggleGroup();
@@ -72,6 +81,7 @@ class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
 		getMenus().addAll(mbFile, mbOptions, mbView);
 		
 		miNew.setOnAction(e -> mfx.minesweeper.newGame());
+		miLoad.setOnAction(e -> new SeedDialog(mfx));
 		miRestart.setOnAction(e -> mfx.minesweeper.restartGame());
 		miPause.setOnAction(e -> mfx.minesweeper.pauseGame());
 		miExit.setOnAction(e -> System.exit(0));
@@ -106,6 +116,26 @@ class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
 		}
 	}
 	
+	private class SeedDialog extends Dialog<ButtonType>
+	{
+		private SeedDialog(MinesweeperFX mfx)
+		{
+			Random rng = new Random();
+			Label lbl = new Label("Set seed:");
+			// TODO: 10/13/16 change to long field
+			IntField fld = new IntField(MIN_VALUE, MAX_VALUE, rng.nextInt());
+			Button btn = new Button("Generate");
+			btn.setOnAction(e -> fld.setInt(rng.nextInt()));
+			
+			ButtonType b1 = new ButtonType("Okay", OK_DONE);
+			ButtonType b2 = new ButtonType("Cancel", CANCEL_CLOSE);
+			getDialogPane().getButtonTypes().addAll(b1, b2);
+			setTitle("Load Seed");
+			getDialogPane().setContent(new HBox(8, lbl, fld, btn));
+			showAndWait().filter(bt -> bt == b1).ifPresent(bt -> mfx.minesweeper.newGame(fld.getInt()));
+		}
+	}
+	
 	private class CustomDialog extends Dialog<ButtonType>
 	{
 		private CustomDialog(MinesweeperFX mfx)
@@ -134,8 +164,8 @@ class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
 			grid.add(fld2, 1, 1);
 			grid.add(fld3, 1, 2);
 			
-			ButtonType b1 = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
-			ButtonType b2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+			ButtonType b1 = new ButtonType("Okay", OK_DONE);
+			ButtonType b2 = new ButtonType("Cancel", CANCEL_CLOSE);
 			getDialogPane().getButtonTypes().addAll(b1, b2);
 			setTitle("Custom Board");
 			getDialogPane().setContent(grid);
