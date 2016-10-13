@@ -40,9 +40,8 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		
 		CheckMenuItem miMins = new CheckMenuItem("Show Minutes");
 		CheckMenuItem miMills = new CheckMenuItem("Show Milliseconds");
+		CheckMenuItem miGrid = new CheckMenuItem("Show Grid");
 		MenuItem miCL = new MenuItem("Change Log v" + Minesweeper.VERSION);
-		miMins.selectedProperty().addListener((a, b, c) -> mfx.data.setFormat(c, miMills.isSelected()));
-		miMills.selectedProperty().addListener((a, b, c) -> mfx.data.setFormat(miMins.isSelected(), c));
 		
 		miNew.setAccelerator(new KeyCodeCombination(F2));
 		miRestart.setAccelerator(new KeyCodeCombination(F2, CONTROL_DOWN));
@@ -56,9 +55,10 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		
 		miMins.setAccelerator(new KeyCodeCombination(M));
 		miMills.setAccelerator(new KeyCodeCombination(M, CONTROL_DOWN));
+		miGrid.setAccelerator(new KeyCodeCombination(G));
 		
 		Menu mbView = new Menu("View");
-		mbView.getItems().addAll(miMins, miMills, new SeparatorMenuItem(), miCL);
+		mbView.getItems().addAll(miMins, miMills, new SeparatorMenuItem(), miGrid, new SeparatorMenuItem(), miCL);
 		
 		getMenus().addAll(mbFile, mbOptions, mbView);
 		
@@ -72,6 +72,10 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		miExpert.setOnAction(e -> mfx.minesweeper.setDifficulty(EXPERT));
 		miCustom.setOnAction(e -> new CustomDialog(mfx));
 		miNF.setOnAction(e -> mfx.minesweeper.setNoFlagging(miNF.isSelected()));
+		
+		miMins.setOnAction(e -> mfx.data.setFormat(miMins.isSelected(), miMills.isSelected()));
+		miMills.setOnAction(e -> mfx.data.setFormat(miMins.isSelected(), miMills.isSelected()));
+		miGrid.setOnAction(e -> mfx.board.setShowGrid(miGrid.isSelected()));
 	}
 	
 	@Override

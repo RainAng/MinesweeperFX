@@ -27,6 +27,8 @@ class Board extends StackPane implements Event.Listener
 	
 	private final Canvas canvas;
 	
+	private boolean showGrid;
+	
 	Board(Minesweeper ms, Border border)
 	{
 		this.ms = ms;
@@ -34,6 +36,12 @@ class Board extends StackPane implements Event.Listener
 		
 		setBorder(border);
 		getChildren().add(canvas);
+	}
+	
+	public void setShowGrid(boolean showGrid)
+	{
+		this.showGrid = showGrid;
+		canvas.paintBoard(canvas.getGraphicsContext2D());
 	}
 	
 	@Override
@@ -64,9 +72,14 @@ class Board extends StackPane implements Event.Listener
 		case NEW_GAME:
 		case RESTART_GAME:
 		case GAME_PAUSED:
+			canvas.paintBoard(canvas.getGraphicsContext2D());
+			break;
 		case GAME_WON:
 		case GAME_LOST:
-			canvas.paintBoard(canvas.getGraphicsContext2D());
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+			canvas.paintBoard(gc);
+			gc.setFill(Color.color(0, 0, 0, 0.25));
+			gc.fillRect(0, 0, getWidth(), getHeight());
 			break;
 		case TILE_CLEARED:
 		case TILE_CHORDED:
@@ -95,7 +108,12 @@ class Board extends StackPane implements Event.Listener
 			setOnMouseClicked(e ->
 			{
 				if (e.getButton() == MouseButton.PRIMARY)
-					ms.clear(x(e), y(e), e.isSecondaryButtonDown());
+					if (ms.getState() == Minesweeper.GameState.END)
+					{
+						paintBoard(gc);
+						paintBoardOverlay(gc);
+					} else
+						ms.clear(x(e), y(e), e.isSecondaryButtonDown());
 			});
 			setOnMousePressed(e ->
 			{
@@ -132,10 +150,12 @@ class Board extends StackPane implements Event.Listener
 			if (t == null)
 				return;
 			
-			double x = t.getX() * resolution + 0.5;
-			double y = t.getY() * resolution + 0.5;
+			double x = t.getX() * resolution;
+			double y = t.getY() * resolution;
 			
 			String text = "";
+			
+			clearTile(gc, x, y);
 			
 			if (ms.getState() == Minesweeper.GameState.PAUSE)
 			{
@@ -197,14 +217,14 @@ class Board extends StackPane implements Event.Listener
 			gc.fillText(text, x + resolution / 2, y + resolution / 2);
 			
 			if (mouseover.get() == t)
-				paintHighlight(gc, x, y);
+				paintTileHighlight(gc, x, y);
 		}
 		
 		private void paintTile(GraphicsContext gc, double x, double y)
 		{
-			clearTile(gc, x, y);
-			
 			double s = resolution - 1;
+			x += 0.5;
+			y += 0.5;
 			
 			for (int i = 0; i < 2; i++)
 			{
@@ -223,7 +243,10 @@ class Board extends StackPane implements Event.Listener
 		
 		private void paintFloor(GraphicsContext gc, double x, double y)
 		{
-			clearTile(gc, x, y);
+			if (!showGrid)
+				return;
+			x += 0.5;
+			y += 0.5;
 			double s = resolution - 1;
 			gc.setStroke(GRAY);
 			gc.strokeLine(x, y, x + s, y);
@@ -233,16 +256,22 @@ class Board extends StackPane implements Event.Listener
 			gc.strokeLine(x + s, y + s, x + 1, y + s);
 		}
 		
-		private void paintHighlight(GraphicsContext gc, double x, double y)
+		private void paintTileHighlight(GraphicsContext gc, double x, double y)
 		{
 			gc.setFill(Color.color(0, 0, 0, 0.25));
-			gc.fillRect(x, y, resolution - 0.5, resolution - 0.5);
+			gc.fillRect(x, y, resolution, resolution);
+		}
+		
+		private void paintBoardOverlay(GraphicsContext gc)
+		{
+			gc.setFill(Color.color(0, 0, 0, 0.25));
+			gc.fillRect(0, 0, getWidth(), getHeight());
 		}
 		
 		private void clearTile(GraphicsContext gc, double x, double y)
 		{
 			gc.setFill(LIGHTGRAY);
-			gc.fillRect(x, y, resolution - 0.5, resolution - 0.5);
+			gc.fillRect(x, y, resolution, resolution);
 		}
 	}
 }
