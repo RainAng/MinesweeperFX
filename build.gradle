@@ -22,8 +22,7 @@ dependencies {
 
 jar {
 	manifest {
-		attributes "Class-Path": "MinesweeperLib-${libVersion}.jar",
-				"Main-Class": 'com.github.rainang.minesweeperfx.MinesweeperFX'
+		attributes "Main-Class": 'com.github.rainang.minesweeperfx.MinesweeperFX'
 	}
 	configurations.shade.each { dep ->
 		from(project.zipTree(dep)) {
