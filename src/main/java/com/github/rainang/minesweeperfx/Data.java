@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Data extends BorderPane implements Event.Listener
+class Data extends BorderPane implements Event.Listener
 {
 	private static final String TIME = "\u231A";
 	private static final String MINE = "\u2738";

@@ -38,7 +38,7 @@ class Board extends StackPane implements Event.Listener
 		getChildren().add(canvas);
 	}
 	
-	public void setShowGrid(boolean showGrid)
+	void setShowGrid(boolean showGrid)
 	{
 		this.showGrid = showGrid;
 		canvas.paintBoard(canvas.getGraphicsContext2D());

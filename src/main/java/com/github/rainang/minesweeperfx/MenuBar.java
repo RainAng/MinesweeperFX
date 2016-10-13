@@ -11,7 +11,7 @@ import static com.github.rainang.minesweeperlib.Minesweeper.Difficulty.*;
 import static javafx.scene.input.KeyCode.*;
 import static javafx.scene.input.KeyCombination.CONTROL_DOWN;
 
-public class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
+class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
 {
 	private final RadioMenuItem miBeginner = new RadioMenuItem("Beginner");
 	private final RadioMenuItem miIntermediate = new RadioMenuItem("Intermediate");
