@@ -41,7 +41,13 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		CheckMenuItem miMins = new CheckMenuItem("Show Minutes");
 		CheckMenuItem miMills = new CheckMenuItem("Show Milliseconds");
 		CheckMenuItem miGrid = new CheckMenuItem("Show Grid");
+		CheckMenuItem miMenu = new CheckMenuItem("Show Menu");
+		CheckMenuItem miData = new CheckMenuItem("Show Data");
 		MenuItem miCL = new MenuItem("Change Log v" + Minesweeper.VERSION);
+		
+		miGrid.setSelected(true);
+		miMenu.setSelected(true);
+		miData.setSelected(true);
 		
 		miNew.setAccelerator(new KeyCodeCombination(F2));
 		miRestart.setAccelerator(new KeyCodeCombination(F2, CONTROL_DOWN));
@@ -56,9 +62,12 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		miMins.setAccelerator(new KeyCodeCombination(M));
 		miMills.setAccelerator(new KeyCodeCombination(M, CONTROL_DOWN));
 		miGrid.setAccelerator(new KeyCodeCombination(G));
+		miMenu.setAccelerator(new KeyCodeCombination(F3));
+		miData.setAccelerator(new KeyCodeCombination(F4));
 		
 		Menu mbView = new Menu("View");
-		mbView.getItems().addAll(miMins, miMills, new SeparatorMenuItem(), miGrid, new SeparatorMenuItem(), miCL);
+		mbView.getItems().addAll(miMins, miMills, new SeparatorMenuItem(), miMenu, miData, miGrid, new
+				SeparatorMenuItem(), miCL);
 		
 		getMenus().addAll(mbFile, mbOptions, mbView);
 		
@@ -76,6 +85,8 @@ public class MenuBar extends javafx.scene.control.MenuBar implements Event.Liste
 		miMins.setOnAction(e -> mfx.data.setFormat(miMins.isSelected(), miMills.isSelected()));
 		miMills.setOnAction(e -> mfx.data.setFormat(miMins.isSelected(), miMills.isSelected()));
 		miGrid.setOnAction(e -> mfx.board.setShowGrid(miGrid.isSelected()));
+		miMenu.setOnAction(e -> mfx.showData(miMenu.isSelected(), miData.isSelected()));
+		miData.setOnAction(e -> mfx.showData(miMenu.isSelected(), miData.isSelected()));
 	}
 	
 	@Override

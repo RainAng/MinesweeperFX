@@ -77,4 +77,16 @@ public class MinesweeperFX extends Application implements Event.Listener
 			break;
 		}
 	}
+	
+	void showData(boolean m, boolean d)
+	{
+		VBox box = (VBox) stage.getScene().getRoot();
+		box.getChildren().clear();
+		if (m)
+			box.getChildren().add(menu);
+		if (d)
+			box.getChildren().add(this.data);
+		box.getChildren().add(board);
+		stage.sizeToScene();
+	}
 }

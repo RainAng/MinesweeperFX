@@ -27,7 +27,7 @@ class Board extends StackPane implements Event.Listener
 	
 	private final Canvas canvas;
 	
-	private boolean showGrid;
+	private boolean showGrid = true;
 	
 	Board(Minesweeper ms, Border border)
 	{
