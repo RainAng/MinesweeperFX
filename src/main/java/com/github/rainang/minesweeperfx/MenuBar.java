@@ -1,6 +1,6 @@
 package com.github.rainang.minesweeperfx;
 
-import com.github.rainang.minesweeperlib.Event;
+import com.github.rainang.minesweeperlib.GameEvent;
 import com.github.rainang.minesweeperlib.Minesweeper;
 import com.github.rainang.minesweeperlib.Tile;
 import javafx.scene.control.*;
@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.Random;
 
-import static com.github.rainang.minesweeperlib.Minesweeper.Difficulty.*;
+import static com.github.rainang.minesweeperlib.Difficulty.*;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 import static javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE;
@@ -18,7 +18,7 @@ import static javafx.scene.control.ButtonBar.ButtonData.OK_DONE;
 import static javafx.scene.input.KeyCode.*;
 import static javafx.scene.input.KeyCombination.CONTROL_DOWN;
 
-class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
+class MenuBar extends javafx.scene.control.MenuBar implements GameEvent.Listener
 {
 	private final RadioMenuItem miBeginner = new RadioMenuItem("Beginner");
 	private final RadioMenuItem miIntermediate = new RadioMenuItem("Intermediate");
@@ -100,11 +100,11 @@ class MenuBar extends javafx.scene.control.MenuBar implements Event.Listener
 	}
 	
 	@Override
-	public void onGameEvent(Event event, Minesweeper ms, Tile tile)
+	public void onGameEvent(GameEvent event, Minesweeper ms, Tile tile)
 	{
 		switch (event)
 		{
-		case DIFFICULTY_CHANGED:
+		case DIFFICULTY_CHANGE_EVENT:
 			if (!miBeginner.isSelected() && ms.getWidth() == 9 && ms.getHeight() == 9 && ms.getMines() == 10)
 				miBeginner.setSelected(true);
 			else if (!miIntermediate.isSelected() && ms.getWidth() == 16 && ms.getHeight() == 16 && ms.getMines() ==

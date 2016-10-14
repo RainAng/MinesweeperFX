@@ -1,6 +1,7 @@
 package com.github.rainang.minesweeperfx;
 
-import com.github.rainang.minesweeperlib.Event;
+import com.github.rainang.minesweeperlib.GameEvent;
+import com.github.rainang.minesweeperlib.GameState;
 import com.github.rainang.minesweeperlib.Minesweeper;
 import com.github.rainang.minesweeperlib.Tile;
 import javafx.beans.property.ObjectProperty;
@@ -17,7 +18,7 @@ import javafx.scene.text.TextAlignment;
 
 import static javafx.scene.paint.Color.*;
 
-class Board extends StackPane implements Event.Listener
+class Board extends StackPane implements GameEvent.Listener
 {
 	private static final String FLAG = "\u2690";
 	private static final String MINE = "\u2738";
@@ -51,11 +52,11 @@ class Board extends StackPane implements Event.Listener
 	}
 	
 	@Override
-	public void onGameEvent(Event event, Minesweeper minesweeper, Tile tile)
+	public void onGameEvent(GameEvent event, Minesweeper minesweeper, Tile tile)
 	{
 		switch (event)
 		{
-		case DIFFICULTY_CHANGED:
+		case DIFFICULTY_CHANGE_EVENT:
 			Insets i = getBorder().getInsets();
 			double w = ms.getWidth() * resolution;
 			double h = ms.getHeight() * resolution;
@@ -69,23 +70,23 @@ class Board extends StackPane implements Event.Listener
 				canvas.setHeight(h);
 				setHeight(h + i.getTop() + i.getBottom());
 			}
-		case NEW_GAME:
-		case RESTART_GAME:
-		case GAME_PAUSED:
+		case NEW_GAME_EVENT:
+		case RESTART_GAME_EVENT:
+		case PAUSE_EVENT:
 			canvas.paintBoard(canvas.getGraphicsContext2D());
 			break;
-		case GAME_WON:
-		case GAME_LOST:
+		case WIN_EVENT:
+		case LOSE_EVENT:
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			canvas.paintBoard(gc);
 			gc.setFill(Color.color(0, 0, 0, 0.25));
 			gc.fillRect(0, 0, getWidth(), getHeight());
 			break;
-		case TILE_CLEARED:
-		case TILE_CHORDED:
+		case OPEN_EVENT:
+		case CHORD_EVENT:
 			canvas.paintBoard(canvas.getGraphicsContext2D());
 			break;
-		case TILE_FLAGGED:
+		case FLAG_EVENT:
 			canvas.paintTile(canvas.getGraphicsContext2D(), tile);
 			break;
 		}
@@ -108,12 +109,14 @@ class Board extends StackPane implements Event.Listener
 			setOnMouseClicked(e ->
 			{
 				if (e.getButton() == MouseButton.PRIMARY)
-					if (ms.getState() == Minesweeper.GameState.END)
+					if (ms.getGameState() == GameState.END)
 					{
 						paintBoard(gc);
 						paintBoardOverlay(gc);
-					} else
-						ms.clear(x(e), y(e), e.isSecondaryButtonDown());
+					} else if (e.isSecondaryButtonDown())
+						ms.chord(x(e), y(e));
+					else
+						ms.open(x(e), y(e));
 			});
 			setOnMousePressed(e ->
 			{
@@ -157,7 +160,7 @@ class Board extends StackPane implements Event.Listener
 			
 			clearTile(gc, x, y);
 			
-			if (ms.getState() == Minesweeper.GameState.PAUSE)
+			if (ms.getGameState() == GameState.PAUSE)
 			{
 				paintFloor(gc, x, y);
 				return;
@@ -207,9 +210,9 @@ class Board extends StackPane implements Event.Listener
 			} else
 			{
 				paintTile(gc, x, y);
-				if (t.isFlag())
+				if (t.hasFlag())
 				{
-					gc.setFill(ms.getState() == Minesweeper.GameState.END && !t.isMine() ? RED : BLACK);
+					gc.setFill(ms.getGameState() == GameState.END && !t.isMine() ? RED : BLACK);
 					text = FLAG;
 				}
 			}

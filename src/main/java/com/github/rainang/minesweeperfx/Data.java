@@ -1,6 +1,6 @@
 package com.github.rainang.minesweeperfx;
 
-import com.github.rainang.minesweeperlib.Event;
+import com.github.rainang.minesweeperlib.GameEvent;
 import com.github.rainang.minesweeperlib.Minesweeper;
 import com.github.rainang.minesweeperlib.Tile;
 import javafx.application.Platform;
@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class Data extends BorderPane implements Event.Listener
+class Data extends BorderPane implements GameEvent.Listener
 {
 	private static final String TIME = "\u231A";
 	private static final String MINE = "\u2738";
@@ -57,13 +57,13 @@ class Data extends BorderPane implements Event.Listener
 	}
 	
 	@Override
-	public void onGameEvent(Event event, Minesweeper ms, Tile tile)
+	public void onGameEvent(GameEvent event, Minesweeper ms, Tile tile)
 	{
 		switch (event)
 		{
-		case NEW_GAME:
-		case RESTART_GAME:
-		case TILE_FLAGGED:
+		case NEW_GAME_EVENT:
+		case RESTART_GAME_EVENT:
+		case FLAG_EVENT:
 			mine.setText("" + (ms.isNoFlagging() ? ms.getMines() : ms.getMines() - ms.getFlagsUsed()));
 			break;
 		}

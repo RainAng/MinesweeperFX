@@ -1,6 +1,7 @@
 package com.github.rainang.minesweeperfx;
 
-import com.github.rainang.minesweeperlib.Event;
+import com.github.rainang.minesweeperlib.Difficulty;
+import com.github.rainang.minesweeperlib.GameEvent;
 import com.github.rainang.minesweeperlib.Minesweeper;
 import com.github.rainang.minesweeperlib.Tile;
 import javafx.application.Application;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
 import static javafx.scene.layout.BorderStrokeStyle.SOLID;
 import static javafx.scene.paint.Color.*;
 
-public class MinesweeperFX extends Application implements Event.Listener
+public class MinesweeperFX extends Application implements GameEvent.Listener
 {
 	public static void main(String[] args)
 	{
@@ -39,11 +40,11 @@ public class MinesweeperFX extends Application implements Event.Listener
 	{
 		this.stage = stage;
 		data.setBorder(createBevelBorderLowered());
-		minesweeper.addEventListener(board);
-		minesweeper.addEventListener(data);
-		minesweeper.addEventListener(menu);
-		minesweeper.addEventListener(this);
-		minesweeper.setDifficulty(Minesweeper.Difficulty.BEGINNER);
+		minesweeper.addGameEventListener(board);
+		minesweeper.addGameEventListener(data);
+		minesweeper.addGameEventListener(menu);
+		minesweeper.addGameEventListener(this);
+		minesweeper.setDifficulty(Difficulty.BEGINNER);
 		
 		VBox root = new VBox(menu, data, board);
 		root.setFillWidth(true);
@@ -66,11 +67,11 @@ public class MinesweeperFX extends Application implements Event.Listener
 	}
 	
 	@Override
-	public void onGameEvent(Event event, Minesweeper minesweeper, Tile tile)
+	public void onGameEvent(GameEvent event, Minesweeper minesweeper, Tile tile)
 	{
 		switch (event)
 		{
-		case DIFFICULTY_CHANGED:
+		case DIFFICULTY_CHANGE_EVENT:
 			stage.sizeToScene();
 			stage.centerOnScreen();
 			break;

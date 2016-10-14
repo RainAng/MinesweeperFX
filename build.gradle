@@ -2,7 +2,7 @@ apply plugin: 'java'
 
 group 'com.github.RainAng'
 version '0.1.0'
-def libVersion = '0.7.1'
+def libVersion = '0.8.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
