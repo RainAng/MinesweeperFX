@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-group 'com.github.RainAng'
-version '0.1.0'
+group 'com.github.rainang'
+version '0.2.0-alpha'
 def libVersion = '0.8.1'
 
 sourceCompatibility = 1.8
@@ -17,7 +17,7 @@ configurations {
 }
 
 dependencies {
-	shade "com.github.RainAng:MinesweeperLib:v$libVersion"
+	shade "com.github.rainang:minesweeperlib:v$libVersion"
 }
 
 jar {
